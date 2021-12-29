@@ -8,7 +8,7 @@ on:
         description: Who to greet
         options: 
         - monalisa
-        - cschleiden
+        - lisamona
       message:
         required: true
       use-emoji:
@@ -22,12 +22,15 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+        run: |
+          if [github.event.inputs.name == 'monalisa']; then MATRIX=[monalisa, lisamona]; else MATRIX=[lisamona]
+          echo "${MATRIX}"
+          echo "::set-output name=matrix::{\"username\":${MATRIX}}"
   greet:
     needs: prepare-matrix
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJSON(needs.prepare-matrix.outputs.matrix)}}
     steps:
-    - name: Send greeting
+    - name: Send greeting to ${{ matrix.username }}
       run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
