@@ -23,7 +23,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          if ${{ github.event.inputs.name == 'monalisa' }}; then MATRIX={\"include\":[{\"username\":\"monalisa\"},{\"username\":\"lisamona\"}]}"; else MATRIX={\"include\":[{\"username\":\"lisamona\"}]}"; fi
+          if ${{ github.event.inputs.name == 'monalisa' }}; then MATRIX='{\"include\":[{\"username\":\"monalisa\"},{\"username\":\"lisamona\"}]}'; else MATRIX='{\"include\":[{\"username\":\"lisamona\"}]}'; fi
           echo "${MATRIX}"
           echo "::set-output name=matrix::${MATRIX}"
   greet:
