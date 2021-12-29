@@ -33,4 +33,4 @@ jobs:
       matrix: ${{fromJSON(needs.prepare-matrix.outputs.matrix)}}
     steps:
     - name: Send greeting to ${{ matrix.username }}
-      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ matrix.username }}"
