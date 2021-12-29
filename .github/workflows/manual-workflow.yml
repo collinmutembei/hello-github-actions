@@ -16,9 +16,18 @@ on:
         description: Include 🎉🤣 emojis
 
 jobs:
-  greet:
+  prepare-matrix:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+  greet:
+    needs: prepare-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJSON(needs.prepare-matrix.outputs.matrix)}}
     steps:
     - name: Send greeting
       run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
